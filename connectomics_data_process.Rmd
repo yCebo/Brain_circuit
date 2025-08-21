@@ -1,0 +1,75 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+## Data acquisition
+
+- Resources
+  - The mm3 EM data-set
+    - https://www.microns-explorer.org/cortical-mm3
+  - The Patch-seq gene expression data ‘Mouse Patch-seq VIS–RNAseq’ 
+    - https://knowledge.brain-map.org/data/1HEYEW7GMUKWIQW37BO/summary
+  - The associated cell metadata
+    - https://portal.brain-map.org/cell-types/classes/multimodal-characterization
+
+- Availability  
+  - "fetch.txt" -- glimpse
+
+```{r}
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(stringr)
+  library(magrittr)
+  library(data.table)
+})
+```
+
+
+```{bash}
+# git clone https://github.com/yCebo/Brin_circuit.git
+
+echo "## Data acquisition" >> README.md
+git status
+```
+
+
+```{bash}
+git add README.md
+git commit -m "README updation"
+git push
+```
+
+
+```{r}
+proj_name = "Raw_data_bag_1_MousePSeqVIS_T_Raw"
+```
+
+
+```{r}
+proj_name = "Raw_data_bag_1_MousePSeqVIS_T_Raw"
+
+fetch_list = fread(input=paste0(proj_data_dir, proj_name, "/fetch.txt"), sep="\t")
+colnames(fetch_list) = c("url", "size", "name")
+```
+
+
+```{r}
+fetch_list %>% select_at("name") %>% unlist %>% str_subset("fastq") %>% length # All .fastq files
+```
+
+
+```{r}
+proj_name = "Analysis_bag_1_MousePSeqVIS_T_Analysis"
+
+fetch_list = fread(input=paste0(proj_data_dir, proj_name, "/fetch.txt"), sep="\t")
+colnames(fetch_list) = c("url", "size", "name")
+```
+
+
+### The associated cell metadata
+
+```{r}
+file_manifest.mice = readxl::read_excel("2021-09-13_mouse_file_manifest/2021-09-13_mouse_file_manifest.xlsx")
+```
+
